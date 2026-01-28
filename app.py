@@ -178,6 +178,7 @@ def crear_cuenta():
 #---------------------------------------------------------#
 #---------------------------------------------------------#
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -236,6 +237,8 @@ def login():
     # Si entra por GET, mostrar el formulario
     return render_template('login.html')
 
+ 
+#----------------------------------------------------------#
 
 #----------------------------------------------------------#
 

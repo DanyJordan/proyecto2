@@ -1,0 +1,222 @@
+/* ================= GENERAL ================= */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins","Segoe UI", Tahoma, Arial, sans-serif;
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+/* ================= TARJETAS ================= */
+.card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px 30px;
+    margin-bottom: 30px;
+    border: 1.5px solid #cbd5e1;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #1e3a8a;
+    font-size: 22px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+/* ================= FORMULARIO ================= */
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #334155;
+}
+
+form select,
+form textarea,
+form input[type="date"],
+form input[type="time"] {
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #cbd5e1;
+    margin-bottom: 18px;
+    font-size: 14px;
+    background: #ffffff;
+}
+
+form select:focus,
+form textarea:focus,
+form input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 6px rgba(37,99,235,0.35);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+/* ================= BOTÓN FORM ================= */
+form button {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(37,99,235,0.45);
+}
+
+/* ================= NAVEGACIÓN ================= */
+.acciones-nav {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn {
+    background: #e2e8f0;
+    color: #1e3a8a;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-volver {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* ================= TABLA ================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+thead {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white;
+}
+
+thead th {
+    padding: 12px;
+    text-align: left;
+}
+
+tbody tr {
+    border-bottom: 1px solid #e2e8f0;
+}
+
+tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+tbody td {
+    padding: 12px;
+}
+
+/* ================= ACCIONES ================= */
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.actions button {
+    border: none;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.actions button:first-child {
+    background: #e0e7ff;
+    color: #1e3a8a;
+}
+
+.actions .btn-eliminar {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* ================= FIRMAS ================= */
+.firmas {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.firma {
+    width: 30%;
+    text-align: center;
+}
+
+.linea {
+    border-top: 1px solid #334155;
+    margin-bottom: 6px;
+}
+
+/* ================= ESTADOS ================= */
+.estado-suspendido {
+    color: #b91c1c;
+    font-weight: bold;
+}
+
+.estado-advertencia {
+    color: #d97706;
+    font-weight: bold;
+}
+
+.estado-normal {
+    color: #2563eb;
+    font-weight: bold;
+}
+
+/* ================= IMPRESIÓN ================= */
+@media print {
+    body {
+        background: white;
+    }
+
+    .acciones-nav,
+    button {
+        display: none;
+    }
+
+    .card {
+        box-shadow: none;
+        border-radius: 0;
+        border: none;
+    }
+}

@@ -1,0 +1,130 @@
+/* ===== ESTILO GENERAL ===== */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f8ef;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== CONTENEDOR ===== */
+.container {
+    background-color: #ffffff;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-top: 6px solid #2e7d32;
+}
+
+/* ===== TÍTULO ===== */
+h2 {
+    text-align: center;
+    color: #1b5e20;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* ===== BADGE ===== */
+.badge {
+    background-color: #d32f2f;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+/* ===== TABLA ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th {
+    background-color: #2e7d32;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+/* ===== FILAS ===== */
+tr:hover {
+    background-color: #f1f8e9;
+}
+
+.no-leido {
+    background-color: #e8f5e9;
+    font-weight: bold;
+}
+
+/* ===== ESTADO ===== */
+.estado-nuevo {
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+.estado-leido {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+/* ===== MENSAJE ===== */
+.mensaje {
+    text-align: left;
+}
+
+/* ===== FECHA ===== */
+.fecha {
+    white-space: nowrap;
+}
+
+/* ===== BOTÓN VOLVER ===== */
+.volver {
+    text-align: right;
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 25px;
+    background-color: #2e7d32;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #256928;
+}
+
+/* ===== MENSAJE SIN NOTIFICACIONES ===== */
+.sin-notificaciones {
+    text-align: center;
+    padding: 30px;
+    font-size: 18px;
+    color: #555;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+        font-size: 13px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}

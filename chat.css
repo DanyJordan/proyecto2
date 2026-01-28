@@ -1,0 +1,209 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #ece5dd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    width: 380px;
+    height: 600px;
+    background: #fff;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px #aaa;
+}
+
+.chat-header {
+    background: #075e54;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.chat-box {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background: #e5ddd5;
+}
+
+.mensaje {
+    background: #dcf8c6;
+    margin: 5px 0;
+    padding: 8px 10px;
+    border-radius: 10px;
+    max-width: 80%;
+    align-self: flex-end;
+    position: relative;
+}
+
+.hora {
+    font-size: 10px;
+    color: #555;
+    float: right;
+    margin-top: 3px;
+}
+
+.input-area {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #f0f0f0;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+textarea {
+    flex: 1;
+    resize: none;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 12px;
+    outline: none;
+    background: #fff;
+    margin: 0 8px;
+}
+
+button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+.audio-msg {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #e7f3ff;
+    padding: 6px 10px;
+    border-radius: 12px;
+}
+
+.play-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+.media-container {
+    position: relative;
+    display: inline-block;
+}
+
+.media-img, .media-video {
+    max-width: 200px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.media-img.zoomed, .media-video.zoomed {
+    transform: scale(2);
+    z-index: 100;
+    position: relative;
+}
+
+.zoom-btn {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 3px 6px;
+    font-size: 14px;
+}
+
+.download-btn {
+    margin-left: 8px;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 18px;
+}
+
+.audio-msg .duracion {
+    font-size: 13px;
+    color: #555;
+}
+.progress-container {
+    position: relative;
+    width: 100px;
+    height: 4px;
+    background: #cfd8dc;
+    border-radius: 2px;
+    cursor: pointer;
+    overflow: hidden;
+    margin-left: 8px;
+}
+
+.progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0%;
+    background: #2196f3;
+    transition: width 0.1s linear;
+}
+/* === Modal para agrandar multimedia === */
+.media-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+}
+
+.media-modal.hidden {
+    display: none;
+}
+
+.modal-content img,
+.modal-content video {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: white;
+    font-size: 26px;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    padding: 6px 10px;
+}
+
+/* La lupa pequeña dentro del chat */
+.zoom-btn {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 3px 6px;
+    font-size: 14px;
+}

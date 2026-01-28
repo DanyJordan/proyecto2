@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultas - CECyTEM</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/consultas.css') }}">
+<body>
+
+<header class="header">
+    <h1>Consultas Generales</h1>
+    <span>CECyTEM</span>
+</header>
+
+<!-- ================= BARRA SUPERIOR ================= -->
+<div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 20px;
+    background:#f1f1f1;
+    border-bottom:2px solid #1b8e3e;
+    flex-wrap:wrap;
+    gap:10px;
+">
+
+    <a href="/menu"
+       style="background:#8b0000;color:white;
+              padding:10px 16px;border-radius:8px;
+              text-decoration:none;font-weight:bold;">
+        ⬅ Volver al menú
+    </a>
+
+    <input type="text" id="buscador"
+           placeholder="🔍 Buscar alumno..."
+           style="padding:10px;border-radius:8px;
+                  border:1px solid #ccc;min-width:240px;">
+</div>
+
+<main class="contenedor">
+
+<!-- ================================================= -->
+<!-- ============ LISTADO GENERAL DE ALUMNOS ========= -->
+<!-- ================================================= -->
+<section class="card" id="lista-alumnos">
+
+    <h2 class="no-print">Listado General de Alumnos</h2>
+
+    <!-- ENCABEZADO SOLO IMPRESIÓN -->
+    <div id="encabezado-print" style="display:none;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:15px;">
+            <div>
+                <strong>CECyTEM</strong><br>
+                Pase de lista
+            </div>
+            <div>
+                <strong>Grupo:</strong> <span id="grupoPrint"></span><br>
+                <strong>Fecha:</strong> <span id="fechaPrint"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTONES -->
+    <div class="no-print" style="display:flex;gap:12px;margin-bottom:20px;">
+        <button onclick="abrirModal()">🖨️ Imprimir lista por grupo</button>
+        <button onclick="mostrarTodos()">📋 Ver todos</button>
+    </div>
+
+    <!-- TABLA -->
+    <table id="tabla-alumnos">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Nombre del alumno</th>
+                <th>Asist.</th>
+                <th>Asist.</th>
+                <th>Asist.</th>
+                <th>Asist.</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for a in alumnos %}
+            <tr class="fila-alumno" data-grupo="{{ a.grupo }}">
+                <td class="contador"></td>
+                <td class="nombre-alumno">
+                    {{ a.nombre }} {{ a.apellido_paterno }} {{ a.apellido_materno }}
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- BOTÓN IMPRIMIR -->
+    <div class="no-print" style="margin-top:15px;">
+        <button id="btnImprimirGrupo" style="display:none;" onclick="imprimirListaGrupo()">
+            🖨️ Imprimir pase de lista
+        </button>
+    </div>
+</section>
+<!-- ================================================= -->
+<!-- ============ REPORTES POR ALUMNO ================= -->
+<!-- ================================================= -->
+<section class="card no-print" id="reportes-alumno">
+    <h2>Reportes por alumno</h2>
+
+    <button onclick="imprimirSeccion('reportes-alumno')" class="btn-print">
+        🖨️ Imprimir reportes
+    </button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Alumno</th>
+                <th>Grupo</th>
+                <th>Total reportes</th>
+                <th>Último reporte</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in reportes_alumnos %}
+            <tr class="fila-reporte">
+                <td class="nombre-alumno">{{ r.alumno }}</td>
+                <td>{{ r.grupo }}</td>
+                <td>{{ r.total_reportes }}</td>
+                <td>{{ r.ultimo_reporte }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<!-- ================================================= -->
+<!-- ======== SUSPENSIONES Y ADVERTENCIAS ============= -->
+<!-- ================================================= -->
+<section class="card" id="suspensiones">
+    <h2>Suspensiones y advertencias</h2>
+
+    <button onclick="imprimirSeccion('suspensiones')" class="btn-print">
+        🖨️ Imprimir suspensiones
+    </button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Alumno</th>
+                <th>Total reportes</th>
+                <th>Estado</th>
+                <th>Fecha último reporte</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in suspensiones %}
+            <tr class="fila-suspension">
+                <td class="nombre-alumno">{{ s.alumno }}</td>
+                <td>{{ s.reportes }}</td>
+                <td>{{ s.estado }}</td>
+                <td>{{ s.fecha }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+
+<!-- ================= MODAL ================= -->
+<div id="modalGrupo"
+     style="display:none;position:fixed;inset:0;
+            background:rgba(0,0,0,.5);
+            align-items:center;justify-content:center;">
+
+    <div style="background:white;padding:25px;
+                border-radius:12px;width:280px;text-align:center;">
+        <h3>Selecciona el grupo</h3>
+
+        <select id="grupoSeleccionado"
+                style="width:100%;padding:10px;margin:15px 0;">
+            <option value="">-- Selecciona --</option>
+            <option>101</option><option>102</option><option>103</option><option>104</option>
+            <option>301</option><option>302</option><option>303</option><option>304</option>
+            <option>501</option><option>502</option><option>503</option><option>504</option>
+        </select>
+
+        <div style="display:flex;gap:10px;justify-content:center;">
+            <button onclick="filtrarGrupo()">Ver lista</button>
+            <button onclick="cerrarModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= JS ================= -->
+<script>
+function abrirModal(){ document.getElementById('modalGrupo').style.display='flex'; }
+function cerrarModal(){ document.getElementById('modalGrupo').style.display='none'; }
+
+function filtrarGrupo(){
+    const grupo=document.getElementById('grupoSeleccionado').value;
+    document.querySelectorAll('#tabla-alumnos tbody tr').forEach(f=>{
+        f.style.display=(f.dataset.grupo===grupo)?'':'none';
+    });
+    document.getElementById('tituloGrupo').innerText='Lista de alumnos – Grupo '+grupo;
+    document.getElementById('tituloGrupo').style.display='block';
+    document.getElementById('btnImprimirGrupo').style.display='inline-block';
+    cerrarModal();
+}
+
+function mostrarTodos(){
+    document.querySelectorAll('#tabla-alumnos tbody tr').forEach(f=>f.style.display='');
+    document.getElementById('tituloGrupo').style.display='none';
+    document.getElementById('btnImprimirGrupo').style.display='none';
+}
+
+document.getElementById('buscador').addEventListener('keyup',function(){
+    let texto=this.value.toLowerCase();
+    document.querySelectorAll('.nombre-alumno').forEach(td=>{
+        let fila=td.closest('tr');
+        fila.style.display=td.innerText.toLowerCase().includes(texto)?'':'none';
+    });
+});
+function imprimirSeccion(id) {
+    const contenido = document.getElementById(id).innerHTML;
+    const fecha = new Date().toLocaleDateString('es-MX');
+    const hora = new Date().toLocaleTimeString('es-MX');
+
+    const ventana = window.open('', '_blank', 'width=900,height=650');
+
+    ventana.document.write(`
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Impresión CECyTEM</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Arial, sans-serif;
+                margin: 40px;
+                color: #000;
+            }
+
+            /* ===== ENCABEZADO ===== */
+            .encabezado {
+                text-align: center;
+                border-bottom: 3px solid #1b8e3e;
+                padding-bottom: 15px;
+                margin-bottom: 30px;
+            }
+
+            .encabezado h1 {
+                margin: 0;
+                font-size: 22px;
+                color: #1b8e3e;
+            }
+
+            .encabezado h2 {
+                margin: 5px 0;
+                font-size: 16px;
+                font-weight: normal;
+            }
+
+            .encabezado p {
+                margin: 3px 0;
+                font-size: 13px;
+            }
+
+            /* ===== TABLAS ===== */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            th, td {
+                border: 1px solid #000;
+                padding: 8px;
+                font-size: 13px;
+            }
+
+            th {
+                background: #1b8e3e;
+                color: white;
+                text-align: center;
+            }
+
+            td {
+                vertical-align: middle;
+            }
+
+            /* ===== OCULTAR BOTONES ===== */
+            button {
+                display: none;
+            }
+
+            /* ===== PIE ===== */
+            .pie {
+                margin-top: 50px;
+                font-size: 12px;
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="encabezado">
+            <h1>CECyTEM</h1>
+            <h2>Centro de Estudios Científicos y Tecnológicos del Estado de México</h2>
+            <p>Reporte generado por el sistema</p>
+            <p><strong>Fecha:</strong> ${fecha} &nbsp;&nbsp; <strong>Hora:</strong> ${hora}</p>
+        </div>
+
+        ${contenido}
+
+        <div class="pie">
+            Documento generado automáticamente
+        </div>
+
+    </body>
+    </html>
+    `);
+
+    ventana.document.close();
+    ventana.focus();
+    ventana.print();
+    ventana.close();
+}
+function imprimirPaseLista(){
+    const tabla = document.getElementById('lista-alumnos').innerHTML;
+    const grupo = document.getElementById('tituloGrupo').innerText || 'Grupo';
+    const fecha = new Date().toLocaleDateString('es-MX');
+
+    const ventana = window.open('', '_blank', 'width=900,height=650');
+
+    ventana.document.write(`
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Pase de lista</title>
+        <style>
+            body{
+                font-family: Arial, sans-serif;
+                margin:40px;
+            }
+
+            .encabezado{
+                text-align:center;
+                border-bottom:3px solid #1b8e3e;
+                padding-bottom:15px;
+                margin-bottom:25px;
+            }
+
+            .encabezado h1{
+                margin:0;
+                color:#1b8e3e;
+            }
+
+            .info{
+                display:flex;
+                justify-content:space-between;
+                margin-bottom:15px;
+                font-size:14px;
+            }
+
+            table{
+                width:100%;
+                border-collapse:collapse;
+                font-size:13px;
+            }
+
+            th, td{
+                border:1px solid #000;
+                padding:6px;
+            }
+
+            th{
+                background:#1b8e3e;
+                color:white;
+                text-align:center;
+            }
+
+            .firma{
+                margin-top:40px;
+                display:flex;
+                justify-content:flex-end;
+            }
+
+            .firma div{
+                text-align:center;
+                width:250px;
+                border-top:1px solid #000;
+                padding-top:5px;
+            }
+
+            button{
+                display:none;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="encabezado">
+            <h1>CECyTEM</h1>
+            <p>Pase de lista</p>
+        </div>
+
+        <div class="info">
+            <div><strong>${grupo}</strong></div>
+            <div><strong>Fecha:</strong> ${fecha}</div>
+        </div>
+
+        ${tabla}
+
+        <div class="firma">
+            <div>
+                Nombre y firma del docente
+            </div>
+        </div>
+
+    </body>
+    </html>
+    `);
+
+    ventana.document.close();
+    ventana.focus();
+    ventana.print();
+    ventana.close();
+}
+function imprimirListaGrupo() {
+    console.log("Imprimiendo pase de lista...");
+    window.print();
+}
+function imprimirListaGrupo() {
+    document.getElementById('encabezado-print').style.display = 'block';
+    window.print();
+}
+
+function filtrarGrupo() {
+    const grupo = document.getElementById('grupoSeleccionado').value;
+    if (!grupo) return alert('Selecciona un grupo');
+
+    document.querySelectorAll('.fila-alumno').forEach(fila => {
+        fila.style.display = fila.dataset.grupo === grupo ? '' : 'none';
+    });
+
+    document.getElementById('grupoPrint').innerText = grupo;
+    document.getElementById('fechaPrint').innerText =
+        new Date().toLocaleDateString();
+
+    document.getElementById('btnImprimirGrupo').style.display = 'inline-block';
+    document.getElementById('encabezado-print').style.display = 'block';
+
+    cerrarModal();
+}
+
+function mostrarTodos() {
+    document.querySelectorAll('.fila-alumno').forEach(fila => fila.style.display = '');
+    document.getElementById('btnImprimirGrupo').style.display = 'none';
+}
+
+function numerarFilas() {
+    let contador = 1;
+    document.querySelectorAll('.fila-alumno').forEach(fila => {
+        if (fila.style.display !== 'none') {
+            fila.querySelector('.contador').innerText = contador;
+            contador++;
+        }
+    });
+}
+
+function filtrarGrupo() {
+    const grupo = document.getElementById('grupoSeleccionado').value;
+    if (!grupo) {
+        alert('Selecciona un grupo');
+        return;
+    }
+
+    document.querySelectorAll('.fila-alumno').forEach(fila => {
+        fila.style.display =
+            fila.dataset.grupo === grupo ? '' : 'none';
+    });
+
+    numerarFilas(); // 👈 AQUÍ SE REINICIA EL CONTEO
+
+    document.getElementById('grupoPrint').innerText = grupo;
+    document.getElementById('fechaPrint').innerText =
+        new Date().toLocaleDateString();
+
+    document.getElementById('btnImprimirGrupo').style.display = 'inline-block';
+    document.getElementById('encabezado-print').style.display = 'block';
+
+    cerrarModal();
+}
+</script>
+
+</body>
+</html>

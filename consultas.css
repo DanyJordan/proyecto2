@@ -1,0 +1,233 @@
+/* ================= RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ================= VARIABLES AZUL / GRIS ================= */
+:root {
+    --azul: #1e3a8a;
+    --azul-claro: #2563eb;
+    --azul-hover: #1d4ed8;
+    --gris-fondo: #f1f5f9;
+    --gris-borde: #cbd5e1;
+    --gris-texto: #334155;
+    --blanco: #ffffff;
+}
+
+/* ================= BODY ================= */
+body {
+    font-family: 'Poppins','Segoe UI', Arial, sans-serif;
+    background: var(--gris-fondo);
+    color: var(--gris-texto);
+    padding: 20px;
+}
+
+/* ================= HEADER ================= */
+.header {
+    background: linear-gradient(135deg, var(--azul), var(--azul-claro));
+    color: var(--blanco);
+    padding: 20px;
+    border-radius: 14px;
+    margin-bottom: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeIn 0.6s ease-in-out;
+    box-shadow: 0 8px 20px rgba(37,99,235,0.35);
+}
+
+.header h1 {
+    font-size: 26px;
+}
+
+/* ================= ACCIONES ================= */
+.acciones {
+    display: flex;
+    gap: 10px;
+}
+
+.acciones button,
+.btn-volver {
+    background: var(--blanco);
+    color: var(--azul);
+    border: 1.5px solid var(--gris-borde);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.acciones button:hover,
+.btn-volver:hover {
+    background: #e0e7ff;
+    transform: translateY(-2px);
+}
+
+/* ================= CARDS ================= */
+.card {
+    background: var(--blanco);
+    padding: 22px;
+    margin-bottom: 25px;
+    border-radius: 16px;
+    border: 1.5px solid var(--gris-borde);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    animation: slideUp 0.6s ease;
+}
+
+.card h2 {
+    color: var(--azul);
+    margin-bottom: 15px;
+    font-size: 20px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+}
+
+/* ================= TABLAS ================= */
+.tabla-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+thead {
+    background: linear-gradient(135deg, var(--azul), var(--azul-claro));
+    color: var(--blanco);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--gris-borde);
+}
+
+tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+tbody tr:hover {
+    background: #eef2ff;
+}
+
+/* ================= ESTADOS ================= */
+.suspendido {
+    background: #fee2e2 !important;
+    color: #b91c1c;
+    font-weight: bold;
+}
+
+/* ================= BOTÓN GRUPO ================= */
+.btn-grupo {
+    background: linear-gradient(135deg, var(--azul), var(--azul-claro));
+    color: white;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-grupo:hover {
+    background: linear-gradient(135deg, var(--azul), var(--azul-hover));
+    transform: translateY(-2px);
+}
+
+/* ================= MODAL ================= */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.55);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-contenido {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+.modal select {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 10px;
+    border: 1.5px solid var(--gris-borde);
+}
+
+.acciones-modal {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* ================= ANIMACIONES ================= */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .acciones {
+        width: 100%;
+        margin-top: 15px;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    table {
+        font-size: 14px;
+    }
+}
+
+/* ================= IMPRESIÓN ================= */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+
+    .acciones,
+    .btn-volver,
+    .btn-grupo {
+        display: none;
+    }
+
+    .card {
+        box-shadow: none;
+        border-radius: 0;
+        margin-bottom: 15px;
+        border: none;
+    }
+
+    thead {
+        background: #e5e7eb !important;
+        color: #000;
+    }
+}

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Alumnos - Maestras</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-header">💬 Chat con Maestra</div>
+
+    <div id="chat-box" class="chat-box">
+        {% for msg in mensajes %}
+            <div class="mensaje {{ msg.tipo }}">
+                {% if msg.tipo == 'texto' %}
+                    {% if msg.contenido.startswith('📎 Archivo: ') %}
+                        <a href="{{ msg.contenido_url or '#' }}" target="_blank">{{ msg.contenido }}</a>
+                    {% else %}
+                        <p>{{ msg.contenido }}</p>
+                    {% endif %}
+                {% elif msg.tipo == 'audio' %}
+                    <div class="audio-msg">
+                        <span class="duracion">(00:00)</span>
+                        <button class="play-btn">▶️</button>
+                        <div class="waveform"><span></span><span></span><span></span><span></span><span></span></div>
+                        <audio src="{{ msg.contenido }}" preload="metadata"></audio>
+                        <a class="download-btn" href="{{ msg.contenido }}" download>⬇️</a>
+                    </div>
+                {% elif msg.tipo == 'imagen' %}
+                    <div class="media-container">
+                        <img src="{{ msg.contenido }}" class="media-img">
+                        <button class="zoom-btn">🔍</button>
+                    </div>
+                {% elif msg.tipo == 'video' %}
+                    <div class="media-container">
+                        <video src="{{ msg.contenido }}" controls class="media-video"></video>
+                        <button class="zoom-btn">🔍</button>
+                    </div>
+                {% endif %}
+                <span class="hora">{{ msg.hora }}</span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="input-area">
+        <button id="add-btn">📎</button>
+        <input type="file" id="file-input" style="display:none;" accept="image/*,audio/*,video/*">
+        <textarea id="mensaje" placeholder="Escribe un mensaje..."></textarea>
+        <button id="mic-btn">🎙️</button>
+        <button id="send-btn">➤</button>
+    </div>
+</div>
+
+<!-- 🔍 Contenedor modal para ampliar imagen o video -->
+<div id="media-modal" class="media-modal hidden">
+    <span id="close-modal" class="close-modal">🔽</span>
+    <div class="modal-content" id="modal-content"></div>
+</div>
+
+<script>
+const sendBtn = document.getElementById("send-btn");
+const micBtn = document.getElementById("mic-btn");
+const addBtn = document.getElementById("add-btn");
+const fileInput = document.getElementById("file-input");
+const mensajeInput = document.getElementById("mensaje");
+const chatBox = document.getElementById("chat-box");
+
+sendBtn.onclick = () => {
+    const texto = mensajeInput.value.trim();
+    if (texto === "") return;
+    enviarMensaje("texto", texto);
+    mensajeInput.value = "";
+};
+
+addBtn.onclick = () => fileInput.click();
+
+fileInput.onchange = async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Detectar tipo de archivo
+    let tipo = "archivo";
+    if (file.type.startsWith("image/")) tipo = "imagen";
+    else if (file.type.startsWith("video/")) tipo = "video";
+    else if (file.type.startsWith("audio/")) tipo = "audio";
+
+    formData.append("tipo", tipo);
+
+    const res = await fetch("/subir", { method: "POST", body: formData });
+    const data = await res.json();
+    enviarMensaje(tipo, data.url);
+};
+
+function enviarMensaje(tipo, contenido, contenido_url = "") {
+    fetch("/enviar", {
+        method: "POST",
+        body: new URLSearchParams({ tipo, contenido, contenido_url })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const div = document.createElement("div");
+        div.className = "mensaje " + tipo;
+
+        if (tipo === "texto") {
+            div.innerHTML = `<p>${data.contenido}</p><span class="hora">${data.hora}</span>`;
+        } else if (tipo === "imagen") {
+            div.innerHTML = `
+                <div class="media-container">
+                    <img src="${data.contenido}" class="media-img">
+                    <button class="zoom-btn">🔍</button>
+                </div>
+                <span class="hora">${data.hora}</span>`;
+        } else if (tipo === "video") {
+            div.innerHTML = `
+                <div class="media-container">
+                    <video src="${data.contenido}" controls class="media-video"></video>
+                    <button class="zoom-btn">🔍</button>
+                </div>
+                <span class="hora">${data.hora}</span>`;
+        } else if (tipo === "audio") {
+            div.innerHTML = `
+                <div class="audio-msg">
+                    <span class="duracion">(00:00)</span>
+                    <button class="play-btn">▶️</button>
+                    <div class="waveform"><span></span><span></span><span></span><span></span><span></span></div>
+                    <audio src="${data.contenido}" preload="metadata"></audio>
+                    <a class="download-btn" href="${data.contenido}" download>⬇️</a>
+                </div>
+                <span class="hora">${data.hora}</span>`;
+        }
+
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        activarAudios();
+        activarZoom();
+        activarZoomModal(); // activamos modal en nuevos elementos
+    });
+}
+
+// 🎙️ Grabación de audio
+let mediaRecorder, audioChunks = [];
+
+micBtn.onclick = async () => {
+    if (!mediaRecorder || mediaRecorder.state === "inactive") {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.start();
+        micBtn.textContent = "⏹️";
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = async () => {
+            const blob = new Blob(audioChunks, { type: "audio/webm" });
+            const formData = new FormData();
+            formData.append("file", blob, "grabacion.webm");
+            formData.append("tipo", "audio");
+            const res = await fetch("/subir", { method: "POST", body: formData });
+            const data = await res.json();
+            enviarMensaje("audio", data.url);
+            micBtn.textContent = "🎙️";
+        };
+    } else {
+        mediaRecorder.stop();
+    }
+};
+
+// ▶️ Reproducir audios con barra de progreso tipo WhatsApp
+function activarAudios() {
+    document.querySelectorAll(".audio-msg").forEach(box => {
+        const audio = box.querySelector("audio");
+        const btn = box.querySelector(".play-btn");
+        const duracion = box.querySelector(".duracion");
+
+        // Agregamos barra si no existe todavía
+        if (!box.querySelector(".progress-container")) {
+            const progressContainer = document.createElement("div");
+            progressContainer.className = "progress-container";
+            const progressBar = document.createElement("div");
+            progressBar.className = "progress-bar";
+            progressContainer.appendChild(progressBar);
+            box.insertBefore(progressContainer, box.querySelector(".download-btn"));
+        }
+
+        const progressContainer = box.querySelector(".progress-container");
+        const progressBar = box.querySelector(".progress-bar");
+
+        let duracionTotal = "(00:00)";
+
+        audio.onloadedmetadata = () => {
+            const min = String(Math.floor(audio.duration / 60)).padStart(2, "0");
+            const seg = String(Math.floor(audio.duration % 60)).padStart(2, "0");
+            duracionTotal = `(${min}:${seg})`;
+            duracion.textContent = duracionTotal;
+        };
+
+        btn.onclick = () => {
+            if (audio.paused) {
+                audio.play();
+                btn.textContent = "⏸️";
+
+                // Actualiza progreso y tiempo mientras se reproduce
+                audio.ontimeupdate = () => {
+                    const porcentaje = (audio.currentTime / audio.duration) * 100;
+                    progressBar.style.width = `${porcentaje}%`;
+
+                    const restante = Math.max(0, audio.duration - audio.currentTime);
+                    const min = String(Math.floor(restante / 60)).padStart(2, "0");
+                    const seg = String(Math.floor(restante % 60)).padStart(2, "0");
+                    duracion.textContent = `(${min}:${seg})`;
+                };
+
+                // Cuando termina, vuelve al estado inicial
+                audio.onended = () => {
+                    btn.textContent = "▶️";
+                    progressBar.style.width = "0%";
+                    duracion.textContent = duracionTotal;
+                };
+            } else {
+                audio.pause();
+                btn.textContent = "▶️";
+            }
+        };
+
+        // Permitir hacer clic en la barra para mover el audio
+        progressContainer.onclick = (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const porcentaje = x / rect.width;
+            audio.currentTime = porcentaje * audio.duration;
+            progressBar.style.width = `${porcentaje * 100}%`;
+        };
+    });
+}
+activarAudios();
+
+// 🔍 Zoom para imágenes y videos
+function activarZoom() {
+    document.querySelectorAll(".zoom-btn").forEach(btn => {
+        btn.onclick = () => {
+            const media = btn.previousElementSibling;
+            if (media.classList.contains("zoomed")) {
+                media.classList.remove("zoomed");
+                btn.textContent = "🔍";
+            } else {
+                media.classList.add("zoomed");
+                btn.textContent = "⤡";
+            }
+        };
+    });
+}
+activarZoom();
+
+// 🔍 Modal para mostrar imagen o video fuera del chat
+const modal = document.getElementById("media-modal");
+const modalContent = document.getElementById("modal-content");
+const closeModal = document.getElementById("close-modal");
+
+function activarZoomModal() {
+    document.querySelectorAll(".zoom-btn").forEach(btn => {
+        btn.onclick = () => {
+            const media = btn.previousElementSibling;
+            const clone = media.cloneNode(true);
+
+            // Mostrar en modal
+            modalContent.innerHTML = "";
+            modalContent.appendChild(clone);
+            modal.classList.remove("hidden");
+
+            // Cerrar con botón 🔽
+            closeModal.onclick = () => {
+                modal.classList.add("hidden");
+                modalContent.innerHTML = "";
+            };
+        };
+    });
+}
+activarZoomModal();
+</script>
+</body>
+</html>

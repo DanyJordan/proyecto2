@@ -1,0 +1,324 @@
+/* =========================
+   PALETA LOGIN AZUL / GRIS
+========================= */
+:root {
+  --azul-oscuro: #1e3a8a;
+  --azul: #2563eb;
+  --azul-claro: #3b82f6;
+  --gris-fondo: #f1f5f9;
+  --gris-card: #ffffff;
+  --gris-borde: #cbd5e1;
+  --gris-texto: #334155;
+  --gris-muted: #64748b;
+}
+
+/* =========================
+   RESET + GENERAL
+========================= */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--gris-fondo);
+  margin: 0;
+  padding: 0;
+  color: var(--gris-texto);
+}
+
+/* =========================
+   HEADER / ENCABEZADO
+========================= */
+.menu-header,
+.form-header {
+  background: linear-gradient(135deg, var(--azul-oscuro), var(--azul));
+  color: white;
+  padding: 22px 0;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(30,58,138,0.35);
+}
+
+.menu-logo,
+.form-logo {
+  width: 90px;
+  margin-bottom: 8px;
+}
+
+.menu-header h1,
+.form-header h1 {
+  margin: 6px 0 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.menu-header p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* =========================
+   CONTENEDORES
+========================= */
+.menu-container,
+.form-container {
+  max-width: 1100px;
+  margin: 50px auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* =========================
+   GRID MENU
+========================= */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 35px;
+  width: 100%;
+}
+
+/* =========================
+   TARJETAS / CARDS
+========================= */
+.menu-item,
+.form-card {
+  background: var(--gris-card);
+  border: 1.5px solid var(--gris-borde);
+  border-radius: 18px;
+  padding: 25px;
+  text-decoration: none;
+  color: var(--gris-texto);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.menu-item:hover,
+.form-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 35px rgba(37,99,235,0.25);
+}
+
+/* =========================
+   IMÁGENES
+========================= */
+.menu-item img,
+.form-image {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 3px solid var(--azul);
+  background: #eef2ff;
+  padding: 8px;
+  margin-bottom: 15px;
+}
+
+/* =========================
+   TEXTOS
+========================= */
+.menu-item h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--azul-oscuro);
+}
+
+/* =========================
+   INPUTS / SELECT / TEXTAREA
+========================= */
+label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 10px;
+  display: block;
+  text-align: left;
+  color: var(--gris-texto);
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 10px;
+  border: 1.5px solid var(--gris-borde);
+  font-size: 14px;
+  background: white;
+  transition: 0.3s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--azul);
+  box-shadow: 0 0 6px rgba(37,99,235,0.35);
+}
+
+/* =========================
+   BOTONES
+========================= */
+button,
+.btn-guardar,
+.btn-menu {
+  background: linear-gradient(135deg, var(--azul-oscuro), var(--azul));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover,
+.btn-guardar:hover,
+.btn-menu:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(37,99,235,0.4);
+}
+
+/* =========================
+   BOTONES ACCIONES
+========================= */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.actions a {
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.btn-editar {
+  background: #e0e7ff;
+  color: #1e3a8a;
+}
+
+.btn-eliminar {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.btn-editar:hover {
+  background: var(--azul);
+  color: white;
+}
+
+.btn-eliminar:hover {
+  background: #b91c1c;
+  color: white;
+}
+
+/* =========================
+   TABLAS
+========================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th {
+  background: var(--azul-oscuro);
+  color: white;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid var(--gris-borde);
+}
+
+tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+/* =========================
+   CHAT
+========================= */
+.chat-box {
+  background: var(--gris-card);
+  border: 1.5px solid var(--gris-borde);
+  border-radius: 15px;
+  padding: 15px;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.mensaje-profesor {
+  background: var(--azul);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 12px;
+  max-width: 70%;
+  margin-bottom: 6px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+.menu-footer {
+  background: var(--azul-oscuro);
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  table, thead, tbody, tr, td {
+    display: block;
+    width: 100%;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    background: white;
+    border: 1px solid var(--gris-borde);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 10px;
+  }
+
+  td {
+    text-align: left;
+    padding: 6px 0;
+  }
+
+  td::before {
+    content: attr(data-label) ": ";
+    font-weight: 600;
+    color: var(--gris-muted);
+  }
+}

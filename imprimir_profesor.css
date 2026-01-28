@@ -1,0 +1,141 @@
+
+@page {
+    size: A4;
+    margin: 2.2cm;
+}
+
+/* ================== BASE ================== */
+body {
+    font-family: "Times New Roman", serif;
+    font-size: 13px;
+    color: #000;
+    line-height: 1.55;
+}
+
+/* ================== DOCUMENTO ================== */
+.documento {
+    border: 2.5px double #000;
+    padding: 26px;
+}
+
+/* ================== ENCABEZADO ================== */
+.encabezado {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+}
+
+.encabezado h1 {
+    font-size: 15px;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.encabezado p {
+    margin: 2px 0;
+    font-size: 11.5px;
+}
+
+/* ================== DATOS SUPERIORES ================== */
+.datos-superiores {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    margin-bottom: 18px;
+}
+
+/* ================== TITULO ================== */
+.titulo {
+    text-align: center;
+    margin: 18px 0;
+}
+
+.titulo h2 {
+    font-size: 16px;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+/* ================== TEXTO ================== */
+.parrafo {
+    text-align: justify;
+    margin-top: 14px;
+}
+
+/* ================== DATOS ================== */
+.datos {
+    margin-top: 16px;
+}
+
+.dato {
+    margin-bottom: 10px;
+}
+
+.label {
+    font-weight: bold;
+    display: inline-block;
+    width: 210px;
+}
+
+.valor {
+    border-bottom: 1px solid #000;
+    display: inline-block;
+    width: calc(100% - 220px);
+    padding-left: 4px;
+}
+
+/* ================== HECHOS ================== */
+.hechos {
+    margin-top: 18px;
+    border: 1.5px solid #000;
+    padding: 14px;
+    min-height: 90px;
+    max-height: 110px;
+    text-align: justify;
+    overflow: hidden;
+}
+
+/* ================== FUNDAMENTO ================== */
+.fundamento {
+    margin-top: 14px;
+    font-size: 12.5px;
+    text-align: justify;
+}
+
+/* ================== APERCIBIMIENTO ================== */
+.apercibimiento {
+    margin-top: 14px;
+    border: 1px dashed #000;
+    padding: 12px;
+    font-size: 12.5px;
+    text-align: justify;
+}
+
+/* ================== FIRMAS ================== */
+.firmas {
+    margin-top: 55px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.firma {
+    width: 30%;
+    font-size: 11.5px;
+}
+
+.linea {
+    border-top: 1px solid #000;
+    margin-bottom: 5px;
+}
+
+/* ================== PIE ================== */
+.pie {
+    margin-top: 25px;
+    font-size: 10.5px;
+    text-align: center;
+    font-style: italic;
+}
